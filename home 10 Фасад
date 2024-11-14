@@ -1,0 +1,81 @@
+using System;
+
+public class TV {
+    public void On() { }
+    public void Off() { }
+    public void SetChannel(int channel) { }
+}
+
+public class AudioSystem {
+    public void On() { }
+    public void Off() { }
+    public void SetVolume(int level) { }
+}
+
+public class DVDPlayer {
+    public void Play() { }
+    public void Pause() { }
+    public void Stop() { }
+}
+
+public class GameConsole {
+    public void On() { }
+    public void StartGame() { }
+}
+
+public class HomeTheaterFacade {
+    private readonly TV tv;
+    private readonly AudioSystem audio;
+    private readonly DVDPlayer dvd;
+    private readonly GameConsole console;
+
+    public HomeTheaterFacade(TV tv, AudioSystem audio, DVDPlayer dvd, GameConsole console) {
+        this.tv = tv;
+        this.audio = audio;
+        this.dvd = dvd;
+        this.console = console;
+    }
+
+    public void WatchMovie() {
+        tv.On();
+        audio.On();
+        dvd.Play();
+    }
+
+    public void StopMovie() {
+        dvd.Stop();
+        tv.Off();
+        audio.Off();
+    }
+
+    public void PlayGame() {
+        console.On();
+        console.StartGame();
+    }
+
+    public void ListenToMusic() {
+        tv.On();
+        audio.On();
+        audio.SetVolume(20);
+    }
+
+    public void TurnOffAll() {
+        tv.Off();
+        audio.Off();
+        dvd.Stop();
+    }
+}
+
+class Program {
+    static void Main() {
+        var tv = new TV();
+        var audio = new AudioSystem();
+        var dvd = new DVDPlayer();
+        var console = new GameConsole();
+        var theater = new HomeTheaterFacade(tv, audio, dvd, console);
+        theater.WatchMovie();
+        theater.ListenToMusic();
+        theater.PlayGame();
+        theater.TurnOffAll();
+    }
+}

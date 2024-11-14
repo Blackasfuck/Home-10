@@ -1,0 +1,75 @@
+using System;
+using System.Collections.Generic;
+
+public abstract class FileSystemComponent {
+    public abstract void Display();
+    public abstract int GetSize();
+}
+
+public class File : FileSystemComponent {
+    private readonly string name;
+    private readonly int size;
+
+    public File(string name, int size) {
+        this.name = name;
+        this.size = size;
+    }
+
+    public override void Display() {
+        Console.WriteLine($"File: {name} ({size} KB)");
+    }
+
+    public override int GetSize() {
+        return size;
+    }
+}
+
+public class Directory : FileSystemComponent {
+    private readonly string name;
+    private readonly List<FileSystemComponent> components = new();
+
+    public Directory(string name) {
+        this.name = name;
+    }
+
+    public void Add(FileSystemComponent component) {
+        if (!components.Contains(component)) {
+            components.Add(component);
+        }
+    }
+
+    public void Remove(FileSystemComponent component) {
+        components.Remove(component);
+    }
+
+    public override void Display() {
+        Console.WriteLine($"Directory: {name}");
+        foreach (var component in components) {
+            component.Display();
+        }
+    }
+
+    public override int GetSize() {
+        int size = 0;
+        foreach (var component in components) {
+            size += component.GetSize();
+        }
+        return size;
+    }
+}
+
+class Program {
+    static void Main() {
+        var root = new Directory("Root");
+        var folder1 = new Directory("Folder1");
+        var folder2 = new Directory("Folder2");
+        var file1 = new File("File1.txt", 100);
+        var file2 = new File("File2.txt", 200);
+        folder1.Add(file1);
+        folder2.Add(file2);
+        root.Add(folder1);
+        root.Add(folder2);
+        root.Display();
+        Console.WriteLine($"Total size: {root.GetSize()} KB");
+    }
+}
